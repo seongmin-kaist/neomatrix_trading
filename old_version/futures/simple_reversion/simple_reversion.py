@@ -64,4 +64,5 @@ def strategy(df, config_dict):
 
     weights = {s: sig / total_abs_signal for s, sig in signals.items()}
 
+
     return weights
