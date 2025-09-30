@@ -91,12 +91,27 @@ def strategy(context: DataContext, config_dict: dict) -> dict:
     if final_signals.empty:
         return {}
 
-    # --- 5. Weight Allocation ---
+    # --- 5. Weight Allocation (Normalization) ---
+    # The goal is to allocate capital based on signal strength, ensuring the
+    # total capital usage (sum of absolute weights) equals 1.0 (or 100%).
+    # This fulfills the requirement that the total weight summation is 1.
+
+    # Calculate the sum of the absolute values of all signals. This represents the
+    # total "conviction" of the strategy across all selected positions.
     total_abs_signal = np.abs(final_signals).sum()
 
+    # Normalize each signal by dividing by the total absolute signal.
+    # This ensures that the sum of the absolute values of the final weights equals 1.
+    # Example: If signals are {"BTC": 0.6, "ETH": -0.4}, total_abs_signal is 1.0.
+    # The final weights will be {"BTC": 0.6, "ETH": -0.4}.
+    # The sum of absolute weights is |0.6| + |-0.4| = 1.0.
     if total_abs_signal > 0:
         weights = final_signals / total_abs_signal
     else:
+        # If there are no signals, all weights are zero.
         weights = final_signals * 0
+
+    # The resulting 'weights' dictionary represents a fully invested portfolio
+    # where the sum of absolute allocations equals 1.0.
 
     return weights.to_dict()

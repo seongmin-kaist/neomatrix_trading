@@ -12,7 +12,7 @@ system_config = {
     "marginCoin": "usdt",
     "leverage": 5,
     "trading_hours": 6,
-    "total_allocation": 0.4,
+    "total_allocation": 1,
 }
 
 
